@@ -37,7 +37,7 @@ class Database {
               return console.log(err.message);
             }
             // get the last insert id
-            console.log(`A row has been inserted with rowid ${this.lastID}`);
+            //console.log(`A row has been inserted with rowid ${this.lastID}`);
           });
     }
     getAll(){
