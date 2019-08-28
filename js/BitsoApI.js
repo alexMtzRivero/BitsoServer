@@ -17,7 +17,7 @@ module.exports = class BitsoAPI {
        
             setTimeout(()=>{
                 if(!this.stop){
-                    this.savePrice();
+                    this.savePrice(callBack);
                     this.getBitcoinPrice().then((data)=>{
                         callBack(data.payload)
                         database.insert(data)

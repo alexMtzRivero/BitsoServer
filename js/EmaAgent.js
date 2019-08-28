@@ -3,7 +3,7 @@ const bitso = new BitsoApI(false);
 module.exports = class EmaAgent {
   constructor(shortEmaN, investUnit) {
     this.investUnit = investUnit
-    this.position = 0;
+    this.position = 1;
     this.shortEmaN = shortEmaN;
     this.investment = 0; 
     this.satoshi = 0;
@@ -51,7 +51,7 @@ module.exports = class EmaAgent {
   
 
   buy( cPrise){
-    //this.realBuy(this.investUnit,cPrise)
+    this.realBuy(this.investUnit,cPrise)
     const realPrice = cPrise * 1.01;
     this.investment += this.investUnit;
     this.satoshi += this.investUnit / realPrice;
@@ -60,7 +60,7 @@ module.exports = class EmaAgent {
     this.tax += cPrise * 0.1;
   }
   sell(cPrise){
-    //realSell(this.investUnit,cPrise)
+    this.realSell(this.investUnit,cPrise)
     const realPrice = cPrise * 0.99;
     this.investment -= this.satoshi * realPrice;
     this.investUnit = this.satoshi * realPrice;
