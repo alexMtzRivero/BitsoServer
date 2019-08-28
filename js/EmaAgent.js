@@ -63,22 +63,22 @@ module.exports = class EmaAgent {
 
   buy(cPrise) {
     // this.realBuy(this.investUnit,cPrise)
-    const realPrice = cPrise * 1.01;
+    const realPrice = cPrise ;
     this.investment += this.investUnit;
     this.satoshi += this.investUnit / realPrice;
     this.BUYS++;
-    this.PBUYS += realPrice;
-    this.tax += cPrise * 0.1;
+    this.tax += this.investUnit * 0.0067;
+    this.PBUYS +=  this.investUnit * (1 - 0.0067 );
   }
   sell(cPrise) {
     // this.realSell(this.investUnit,cPrise)
-    const realPrice = cPrise * 0.99;
-    this.investment -= this.satoshi * realPrice;
-    this.investUnit = this.satoshi * realPrice;
+    const realPrice = cPrise;
+    this.investUnit = (this.satoshi!=0)?(this.satoshi * realPrice ):( this.investUnit);
+    this.investment -= this.investUnit;
     this.satoshi = 0;
     this.SELLS++;
-    this.PSELLS += realPrice;
-    this.tax += cPrise * 0.1;
+    this.tax += this.investUnit * 0.0067;
+    this.PSELLS +=  this.investUnit * (1 - 0.0067 );
   }
   realBuy(minorQuantity, price) {
     var bitcoin = minorQuantity / price;
