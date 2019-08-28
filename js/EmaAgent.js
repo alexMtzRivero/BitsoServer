@@ -39,14 +39,14 @@ module.exports = class EmaAgent {
     if (active){
         console.log(`waiting for ema: ${this.shortEma} to be ${(this.position===0) ? `< than ${bid} to sell` : `> than ${ask} to buy` }`);
         //if the price was down but now is smaler than the ema
-        if (this.position === 0 && this.shortEma > bid) {
+        if (this.position === 0 && this.shortEma < bid) {
           this.position = 1;
           this.sell(bid);
         }
 
         //if the price was up but now is bigger than the ema
         else 
-        if (this.position === 1 && this.shortEma < ask) {
+        if (this.position === 1 && this.shortEma > ask) {
           this.buy(ask);
           this.position = 0;
         }
