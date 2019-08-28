@@ -41,14 +41,23 @@ class Database {
           });
     }
     getAll(){
-      let sql = `SELECT info info FROM bitcoin`;
- 
-      this.db.all(sql, [], (err, rows) => {
-        if (err) {
-          throw err;
-        }
-       return rows;
-      });
+     
+      return new Promise((function(resolve, reject) {
+        this.db.all( `SELECT info info FROM bitcoin`,(err, rows) => {
+            if (err) {
+              reject(err);
+            } else {
+              const prices = [];
+              for (const row of rows) {
+                const price = JSON.parse(row.info);
+                prices.id = row.id;
+                prices.push(price);
+              }
+              resolve(prices);
+            }
+          })
+      }.bind(this)));
+      
     }
 }
 module.exports = new Database();
