@@ -3,7 +3,7 @@ const bitso = new BitsoApI(false);
 module.exports = class EmaAgent {
   constructor(shortEmaN, investUnit) {
     this.investUnit = investUnit
-    this.position = 1;
+    this.position = 0;
     this.shortEmaN = shortEmaN;
     this.investment = 0; 
     this.satoshi = 0;
@@ -21,27 +21,33 @@ module.exports = class EmaAgent {
         var ask =Number(input.ask)
         var bid = Number(input.bid)
         var cPrise = (ask+ bid)/2 ;
+	var active = true
         var calculedPrice = cPrise / this.shortEmaN
         // if its alredy counting discount the price 
         if (!isNaN( this.data[this.pointer])) {
           this.shortEma -= this.data[this.pointer];
+        }else{
+         active = false;
         }
 
         //overwrite the data in the array an adit to the ema
         this.data[this.pointer] = calculedPrice;
         this.shortEma += calculedPrice;
-
+//if the array is already full we canbegin to buy or sell
+if(active)
+if (this.position === 0 && this.shortEma < bid) {
         //if the price was down but now is grater than the ema
-        if (this.position === 0 && this.shortEma < bid) {
+        if (this.position === 0 && this.shortEma > bid) {
           this.position = 1;
           this.sell(bid);
         }
         
         //if the price was up but now is smaller than the ema
-        if (this.position === 1 && this.shortEma > ask) {
+        if (this.position === 1 && this.shortEma < ask) {
           this.buy(ask);
           this.position = 0;
         }
+ }
 
         // continue with the circuar list
         this.pointer++;
@@ -80,7 +86,7 @@ module.exports = class EmaAgent {
   realSell(minorQuantity, price){
     var bitcoin   = minorQuantity / price;
     // orden para vender 0.075 bitcoin cuando cueste 500.00 pesos cada bitcoin
-    this.bitso.postOrder("btc_mxn","sell","limit",bitcoin.toFixed(8),null,`${price}`,null).then(resp=>{
+    bitso.postOrder("btc_mxn","sell","limit",bitcoin.toFixed(8),null,`${price}`,null).then(resp=>{
       console.log(`vendiendo ${bitcoin}btc a ${price}mxn ganando ${minorQuantity}mxn conrespuesta: `, resp);
       
     });
