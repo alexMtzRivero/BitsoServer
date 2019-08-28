@@ -26,6 +26,9 @@ app.get('/stop', function (req, res) {
     res.send(true);
 })
 
+app.get('/agentStatus', function (req, res) {
+    res.send(emaAgent);
+})
 app.get('/getAll', function (req, res) {
     database.getAll().then(resp=>{
         res.send(resp);
