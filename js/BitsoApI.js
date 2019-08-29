@@ -9,24 +9,23 @@ module.exports = class BitsoAPI {
         this.stop = false;
         this.path = `https://api${this.test?'-dev':''}.bitso.com`
     }
-    startSavingPrice(callBack){
+    startSavingPrice(){
         this.stop = false;
-        this.savePrice(callBack);
+        this.savePrice();
     }
-    savePrice(callBack){
+    savePrice(){
        
             setTimeout(()=>{
                 if(!this.stop){
-                    this.savePrice(callBack);
+                    this.savePrice();
                     this.getBitcoinPrice().then((data)=>{
-                        callBack(data.payload)
                         database.insert(data)
                     }).catch((err)=>{
                         console.error(err);
                         this.stop = true;
                     }); 
                 }  
-            },1000*60)
+            },1000*600)
         
     }
     stopSavingPrice(){

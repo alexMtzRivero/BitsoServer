@@ -38,7 +38,7 @@ app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 
 //   bitsoApi.getBalance().then((data)=>console.log("from api",JSON.stringify(data)));
-     bitsoApi.startSavingPrice(emaAgent.feed);
+     bitsoApi.startSavingPrice();
 
 })
 // TODO  FUNCTION  GET DATA (PRECIOS HISTORICOS DE BITCOIN)
