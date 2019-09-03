@@ -59,5 +59,24 @@ class Database {
       }.bind(this)));
       
     }
+    getHead(n){
+     
+      return new Promise((function(resolve, reject) {
+        this.db.all( `SELECT info info FROM bitcoin`,(err, rows) => {
+            if (err) {
+              reject(err);
+            } else {
+              const prices = [];
+              for (const row of rows) {
+                const price = JSON.parse(row.info);
+                prices.id = row.id;
+                prices.push(price);
+              }
+              resolve(prices.slice(prices.length-n,prices.length));
+            }
+          })
+      }.bind(this)));
+      
+    }
 }
 module.exports = new Database();
