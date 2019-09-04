@@ -87,6 +87,7 @@ module.exports = class BitsoAPI {
             const stringBody = JSON.stringify(body)
             console.log(stringBody);
             
+            database.insertOperation(stringBody)
             var o = {
                 method: "POST" ,  
                 headers: {
