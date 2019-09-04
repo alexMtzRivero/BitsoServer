@@ -52,6 +52,24 @@ class Database {
           //console.log(`A row has been inserted with rowid ${this.lastID}`);
         });
   }
+  getMovements(){
+    return new Promise((function(resolve, reject) {
+      this.db.all( `SELECT info info FROM operations`,(err, rows) => {
+          if (err) {
+            reject(err);
+          } else {
+            const prices = [];
+            for (const row of rows) {
+              const price = JSON.parse(row.info);
+              prices.id = row.id;
+              prices.push(price);
+            }
+            resolve(prices);
+          }
+        })
+    }.bind(this)));
+    
+  }
     getAll(){
      
       return new Promise((function(resolve, reject) {

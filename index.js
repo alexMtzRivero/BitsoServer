@@ -36,6 +36,11 @@ app.get('/getAll', function (req, res) {
         res.send(resp);
     })
 })
+app.get('/getMovements', function (req, res) {
+    database.getMovements().then(resp=>{
+        res.send(resp);
+    })
+})
 
 app.get('/startTrader', function (req, res) {
     emaAgent.test = false;
