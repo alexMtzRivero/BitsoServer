@@ -81,7 +81,7 @@ module.exports = class EmaAgent {
     //if the array is already full we canbegin to buy or sell
     if (active){
 
-     // if(!this.test)console.log(`waiting for ema: ${this.longEma} to be ${(this.position===0) ? `> than ${cPrise} to sell` : `< than ${cPrise} to buy` }`);
+     if(!this.test)console.log(`waiting for ema: ${this.longEma} to be ${(this.position===0) ? `> than ${this.shortEmaAsk} to sell` : `< than ${this.shortEmaBid} to buy` }`);
         //if the price was down but now is smaler than the ema
         if (this.position === 0 && this.longEma > this.shortEmaAsk) {
           this.sell(bid);

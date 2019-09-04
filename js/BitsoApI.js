@@ -14,10 +14,7 @@ module.exports = class BitsoAPI {
         this.savePrice(callback);
     }
     savePrice(callback){
-       
-            setTimeout(()=>{
-                if(!this.stop){
-                    this.savePrice();
+       if(!this.stop){ 
                     this.getBitcoinPrice().then((data)=>{
                         database.insert(data)
 			callback(data.payload)
@@ -25,8 +22,11 @@ module.exports = class BitsoAPI {
                         console.error(err);
                         this.stop = true;
                     }); 
-                }  
-            },1000*600)
+		setTimeout(()=>{
+                	this.savePrice(callback)
+            	},1000*600) ;
+            }  
+           
         
     }
     stopSavingPrice(){
