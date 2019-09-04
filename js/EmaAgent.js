@@ -134,7 +134,6 @@ module.exports = class EmaAgent {
     // orden para comprar 0.075 bitcoin cuando cueste 500.00 pesos cada bitcoin
     bitso.postOrder("btc_mxn", "buy", "limit", bitcoin.toFixed(8), null, `${price}`, null).then(resp => {
       console.log(`comprando ${bitcoin}btc a ${price}mxn gastando ${minorQuantity}mxn conrespuesta: `, resp);
-
     });
   }
   realSell(minorQuantity, price) {

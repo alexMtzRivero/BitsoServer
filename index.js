@@ -47,6 +47,13 @@ app.get('/stopTrader', function (req, res) {
     res.send(true);
 })
 
+app.get('/balance', function (req, res) {
+    bitsoApi.getBalance().then(result =>{
+        res.send(result);
+    });
+   
+})
+
 //TODO CHANGE TRADE TO UNIT ADD/SUBSTRACT
 
 

@@ -27,6 +27,7 @@ class Database {
 
     init(){
         this.db.run('CREATE TABLE IF NOT EXISTS bitcoin(info text)'); 
+        this.db.run('CREATE TABLE IF NOT EXISTS operations(info text)');
     }
 
     insert(info){
@@ -40,6 +41,17 @@ class Database {
             //console.log(`A row has been inserted with rowid ${this.lastID}`);
           });
     }
+    insertOperation(info){
+      var values = [JSON.stringify(info)];
+      var sql = 'INSERT INTO operations (info) VALUES ( ? )' ;
+      this.db.run(sql,values,function(err) {
+          if (err) {
+            return console.log(err.message);
+          }
+          // get the last insert id
+          //console.log(`A row has been inserted with rowid ${this.lastID}`);
+        });
+  }
     getAll(){
      
       return new Promise((function(resolve, reject) {
