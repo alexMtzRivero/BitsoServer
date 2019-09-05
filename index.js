@@ -74,6 +74,7 @@ app.listen(3000, function () {
 
   database.getHead().then(resp=>{
     emaAgent.initPrices(resp);
+    emaAgent.test = false;
     bitsoApi.startSavingPrice(emaAgent.feed);
 })
 
