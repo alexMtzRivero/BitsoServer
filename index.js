@@ -1,14 +1,18 @@
 const express = require('express')
+const bodyParser = require("body-parser");
 
 const BitsoApi  = require('./js/BitsoApI');
 const EmaAgent = require('./js/EmaAgent.js')
 const bitsoApi = new BitsoApi(false);
-const emaAgent = new EmaAgent(10,270,200,true);
+const emaAgent = new EmaAgent(30,150,200,true);
 emaAgent.feed = emaAgent.feed.bind(emaAgent);
 emaAgent.initPrices = emaAgent.initPrices.bind(emaAgent);
 const database  = require('./js/Database');
 
 const app = express()
+
+app.use( bodyParser.json() ); 
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
 
@@ -59,7 +63,10 @@ app.get('/balance', function (req, res) {
    
 })
 
-//TODO CHANGE TRADE TO UNIT ADD/SUBSTRACT
+app.post('/tradeUnit', function(request, response) {
+    var p1 = request.body.tradeUnit; 
+    emaAgent.investUnit = Number(p1);
+  });
 
 
 app.listen(3000, function () {
@@ -67,14 +74,11 @@ app.listen(3000, function () {
 
   database.getHead().then(resp=>{
     emaAgent.initPrices(resp);
+    bitsoApi.startSavingPrice(emaAgent.feed);
 })
-
-//   bitsoApi.getBalance().then((data)=>console.log("from api",JSON.stringify(data)));
-
 
 })
 // TODO  FUNCTION  GET DATA (PRECIOS HISTORICOS DE BITCOIN)
 
-// TODO  FUNCTION GET MOVEMENTS ( LO HECHO POR LA APP)
 
 // TODO  FUNCTION GET TODAYS INFO (DISPERCION, PRECIO.. ETC)

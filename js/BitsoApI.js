@@ -10,8 +10,10 @@ module.exports = class BitsoAPI {
         this.path = `https://api${this.test?'-dev':''}.bitso.com`
     }
     startSavingPrice(callback){
-        this.stop = false;
-        this.savePrice(callback);
+        if(this.stop){
+            this.stop = false;
+            this.savePrice(callback);
+        }
     }
     savePrice(callback){
        if(!this.stop){ 
