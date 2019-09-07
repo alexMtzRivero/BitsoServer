@@ -6,7 +6,7 @@ const fetch = require('node-fetch')
 module.exports = class BitsoAPI {
     constructor(test) {
         this.test = test;
-        this.stop = false;
+        this.stop = true;
         this.path = `https://api${this.test?'-dev':''}.bitso.com`
     }
     startSavingPrice(callback){
@@ -17,17 +17,17 @@ module.exports = class BitsoAPI {
     }
     savePrice(callback){
        if(!this.stop){ 
-                    this.getBitcoinPrice().then((data)=>{
-                        database.insert(data)
-			callback(data.payload)
-                    }).catch((err)=>{
-                        console.error(err);
-                        this.stop = true;
-                    }); 
-		setTimeout(()=>{
-                	this.savePrice(callback)
-            	},1000*600) ;
-            }  
+            this.getBitcoinPrice().then((data)=>{
+                database.insert(data)
+                callback(data.payload)
+            }).catch((err)=>{
+                console.error(err);
+                this.stop = true;
+            }); 
+            setTimeout(()=>{
+                        this.savePrice(callback)
+                    },1000*600) ;
+        }  
            
         
     }
@@ -117,7 +117,7 @@ module.exports = class BitsoAPI {
         var signature = crypto.createHmac('sha256', keys.secret).update(Data).digest('hex');
         // Build the auth header
         var auth_header = "Bitso " + keys.key + ":" + nonce + ":" + signature;
-        console.log(auth_header);
+        //console.log(auth_header);
         
        return   auth_header
           
