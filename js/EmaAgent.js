@@ -79,12 +79,12 @@ module.exports = class EmaAgent {
     this.shortEmaBid += calculedBid;
     
     //if the array is already full we canbegin to buy or sell
-    if (active){
-
-     if(!this.test)console.log(`waiting for ema: ${this.longEma} to be ${(this.position===0) ? `> than ${this.shortEmaAsk} to sell` : `< than ${this.shortEmaBid} to buy` }`);
-        //if the price was down but now is smaler than the ema
+    
+     if(!this.test && active )console.log(`waiting for ema: ${this.longEma} to be ${(this.position===0) ? `> than ${this.shortEmaAsk} to sell` : `< than ${this.shortEmaBid} to buy` }`);
+        
+     //if the price was down but now is smaler than the ema
         if (this.position === 0 && this.longEma > this.shortEmaAsk) {
-          this.sell(bid);
+          if (active) this.sell(bid);
           this.position = 1;
           operationInfo.sell = true;
         }
@@ -92,11 +92,11 @@ module.exports = class EmaAgent {
         //if the price was up but now is bigger than the ema
         else 
         if (this.position === 1 && this.longEma < this.shortEmaBid) { 
-          this.buy(ask);
+          if (active) this.buy(ask);
           this.position = 0;
           operationInfo.buy = true;
         }
-      }
+      
 
     // continue with the circuar list
     this.pointerLong++;
@@ -144,7 +144,7 @@ module.exports = class EmaAgent {
 
     });
   }
-  getState(cPrice) {
+  getState() {
     return this.PSELLS-this.PBUYS +(this.satoshi * this.dataBid[this.pointerShort] * this.shortEmaN)
   }
   getGraph(data){

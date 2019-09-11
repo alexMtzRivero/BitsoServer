@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const BitsoApi  = require('./js/BitsoApI');
 const EmaAgent = require('./js/EmaAgent.js')
 const bitsoApi = new BitsoApi(false);
-const emaAgent = new EmaAgent(30,150,200,true);
+const emaAgent = new EmaAgent(20,230,200,false);
 emaAgent.feed = emaAgent.feed.bind(emaAgent);
 emaAgent.initPrices = emaAgent.initPrices.bind(emaAgent);
 const database  = require('./js/Database');
@@ -88,7 +88,7 @@ app.post('/tradeUnit', function(request, response) {
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 
-  database.getHead().then(resp=>{
+  database.getHead(emaAgent.longEmaN).then(resp=>{
     emaAgent.initPrices(resp);
     emaAgent.test = false;
     bitsoApi.startSavingPrice(emaAgent.feed);
