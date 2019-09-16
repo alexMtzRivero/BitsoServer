@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const BitsoApi  = require('./js/BitsoApI');
 const EmaAgent = require('./js/EmaAgent.js')
 const bitsoApi = new BitsoApi(false);
-const emaAgent = new EmaAgent(20,230,200,false);
+const emaAgent = new EmaAgent(20,230,200,true);
 emaAgent.feed = emaAgent.feed.bind(emaAgent);
 emaAgent.initPrices = emaAgent.initPrices.bind(emaAgent);
 const database  = require('./js/Database');
@@ -47,7 +47,7 @@ app.get('/agentStatus', function (req, res) {
 })
 app.get('/getAll', function (req, res) {
     console.log("Sending all bitcoin data");
-    database.getAll().then(resp=>{
+    database.getAll('bitcoin').then(resp=>{
         res.send(resp);
     })
 })
@@ -88,12 +88,12 @@ app.post('/tradeUnit', function(request, response) {
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 
-  database.getHead(emaAgent.longEmaN).then(resp=>{
+  database.getHead('bitcoin',emaAgent.longEmaN).then(resp=>{
     emaAgent.initPrices(resp);
     emaAgent.test = false;
     bitsoApi.startSavingPrice(emaAgent.feed);
 })
-console.log("Agent not in test mode and price listener on");
+console.log(`Agent ${emaAgent.test ?'':'not'} in test mode and price listener on`);
 
 })
 // TODO  FUNCTION  GET DATA (PRECIOS HISTORICOS DE BITCOIN)

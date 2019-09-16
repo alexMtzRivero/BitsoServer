@@ -3,8 +3,16 @@ var crypto = require('crypto');
 const  keys = require("../keys.json");
 const database  = require('./Database');
 const fetch = require('node-fetch')
+
+const tickers = [
+    {ticker:"btc_mxn",name:"bitcoin"},
+{ticker:"eth_mxn",name:"ether"},
+{ticker:"xrp_mxn",name:"ripple"},
+{ticker:"ltc_mxn",name:"litecoin"},
+{ticker:"tusd_mxn",name:"dollar"}]
 module.exports = class BitsoAPI {
     constructor(test) {
+        this.index = 0;
         this.test = test;
         this.stop = true;
         this.path = `https://api${this.test?'-dev':''}.bitso.com`
@@ -17,16 +25,19 @@ module.exports = class BitsoAPI {
     }
     savePrice(callback){
        if(!this.stop){ 
-            this.getBitcoinPrice().then((data)=>{
-                database.insert(data)
-                callback(data.payload)
+            this.getBitcoinPrice(tickers[this.index].ticker).then((data)=>{
+                database.insert(data,tickers[this.index].name);
+                callback(data.payload);
+                this.index++;
+                this.index %= 5;
             }).catch((err)=>{
                 console.error(err);
                 this.stop = true;
             }); 
+
             setTimeout(()=>{
                         this.savePrice(callback)
-                    },1000*600) ;
+                    },1000*60*2) ;
         }  
            
         
@@ -39,9 +50,10 @@ module.exports = class BitsoAPI {
     allBooksInfo() {
         return fetch(`${this.path}/v3/available_books/`).then((resp) => resp.json());
     }
-    getBitcoinPrice() {
-        return fetch(`${this.path}/v3/ticker/?book=btc_mxn`).then((resp) => resp.json())
+    getBitcoinPrice(ticker) {
+        return fetch(`${this.path}/v3/ticker/?book=${ticker}`).then((resp) => resp.json())
     }
+    
     getBalance(){
         var o = {
             method: "GET" ,  

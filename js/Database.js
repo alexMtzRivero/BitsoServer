@@ -25,20 +25,27 @@ class Database {
         this.db.close();
     }
 
-    init(){
-        this.db.run('CREATE TABLE IF NOT EXISTS bitcoin(info text)'); 
-        this.db.run('CREATE TABLE IF NOT EXISTS operations(info text)');
+    async init(){
+         await this.db.run('CREATE TABLE IF NOT EXISTS bitcoin (info text)');
+         await this.db.run('CREATE TABLE IF NOT EXISTS ether (info text)');
+         await this.db.run('CREATE TABLE IF NOT EXISTS ripple (info text)');
+         await this.db.run('CREATE TABLE IF NOT EXISTS litecoin (info text)');
+         await this.db.run('CREATE TABLE IF NOT EXISTS dollar (info text)');
+
+         await this.db.run('CREATE TABLE IF NOT EXISTS operations (info text)');
+        
+        
     }
 
-    insert(info){
+    insert(info,table){
         var values = [JSON.stringify(info)];
-        var sql = 'INSERT INTO bitcoin (info) VALUES ( ? )' ;
+        var sql = `INSERT INTO ${table} (info) VALUES ( ? )` ;
         this.db.run(sql,values,function(err) {
             if (err) {
               return console.log(err.message);
             }
             // get the last insert id
-            //console.log(`A row has been inserted with rowid ${this.lastID}`);
+            console.log(`A row has been inserted with rowid ${this.lastID} in ${table}`);
           });
     }
     insertOperation(info){
@@ -67,13 +74,13 @@ class Database {
             resolve(prices);
           }
         })
-    }.bind(this)));
+    }));
     
   }
-    getAll(){
+    getAll(table){
      
-      return new Promise((function(resolve, reject) {
-        this.db.all( `SELECT info info FROM bitcoin`,(err, rows) => {
+      return new Promise((resolve, reject) =>{
+        this.db.all( `SELECT info info FROM ${table} `,(err, rows) => {
             if (err) {
               reject(err);
             } else {
@@ -86,13 +93,14 @@ class Database {
               resolve(prices);
             }
           })
-      }.bind(this)));
+      });
       
     }
-    getHead(n){
-     
-      return new Promise((function(resolve, reject) {
-        this.db.all( `SELECT info info FROM bitcoin`,(err, rows) => {
+    getHead(table,n){
+      return new Promise((resolve, reject) =>{
+        const sql = `SELECT info info FROM ${table}`;
+        
+        this.db.all( sql,(err, rows) => {
             if (err) {
               reject(err);
             } else {
@@ -105,7 +113,7 @@ class Database {
               resolve(prices.slice(prices.length-n,prices.length));
             }
           })
-      }.bind(this)));
+      });
       
     }
 }

@@ -35,8 +35,11 @@ module.exports = class EmaAgent {
   }
 
   feed(input) {
-    var operationInfo = {};
+    if(input.book =="btc_mxn"){
 
+  
+    var operationInfo = {};
+    
     var ask = Number(input.ask);
     var bid = Number(input.bid);
 
@@ -106,6 +109,8 @@ module.exports = class EmaAgent {
     this.pointerShort %= this.shortEmaN;
 
     return operationInfo;
+  }
+  return {}
   }
 
 
