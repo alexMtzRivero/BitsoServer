@@ -32,7 +32,6 @@ module.exports = class BitsoAPI {
                 this.index %= 5;
             }).catch((err)=>{
                 console.error(err);
-                this.stop = true;
             }); 
 
             setTimeout(()=>{
