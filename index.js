@@ -47,7 +47,8 @@ app.get('/agentStatus', function (req, res) {
 })
 app.get('/getAll', function (req, res) {
     console.log("Sending all bitcoin data");
-    database.getAll('bitcoin').then(resp=>{
+    const coin = request.body.coin || 'bitcoin'; 
+    database.getAll(coin).then(resp=>{
         res.send(resp);
     })
 })
