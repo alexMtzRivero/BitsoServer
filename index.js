@@ -47,14 +47,14 @@ app.get('/agentStatus', function (req, res) {
 })
 app.get('/getAll', function (req, res) {
     console.log("Sending all bitcoin data");
-    const coin = request.body.coin || 'bitcoin'; 
+    const coin = req.body.coin || 'bitcoin'; 
     database.getAll(coin).then(resp=>{
         res.send(resp);
     })
 })
 app.get('/getMovements', function (req, res) {
     console.log("Sendin all movements");
-    database.getMovements().then(resp=>{
+    bitsoApi.getMovements().then(resp=>{
         res.send(resp);
     })
 })

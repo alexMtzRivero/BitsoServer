@@ -117,6 +117,17 @@ module.exports = class BitsoAPI {
         }
 
 }
+getMovements(){
+    var o = {
+        method: "GET" ,  
+        headers: {
+              'Authorization':this.getAuthorization("GET","/v3/balance",'')
+          }
+      };
+      
+    return fetch(`${this.path}/v3/ledger/trades`,o).then((result)=>result.json())
+   
+}
 
     getAuthorization(http_method,request_path,body){
         
