@@ -52,7 +52,7 @@ app.get('/getAll', function (req, res) {
         res.send(resp);
     })
 })
-app.get('/getMovements', function (req, res) {
+app.post('/getMovements', function (req, res) {
     console.log("Sendin all movements");
     bitsoApi.getMovements().then(resp=>{
         res.send(resp);
