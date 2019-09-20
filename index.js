@@ -46,13 +46,14 @@ app.get('/agentStatus', function (req, res) {
     res.send(emaAgent);
 })
 app.get('/getAll', function (req, res) {
-    console.log("Sending all bitcoin data");
-    const coin = req.body.coin || 'bitcoin'; 
+    
+    const coin =  req.query.coin || 'bitcoin'; 
+    console.log(`Sending all ${coin} data`);
     database.getAll(coin).then(resp=>{
         res.send(resp);
     })
 })
-app.post('/getMovements', function (req, res) {
+app.get('/getMovements', function (req, res) {
     console.log("Sendin all movements");
     bitsoApi.getMovements().then(resp=>{
         res.send(resp);
